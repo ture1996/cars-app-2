@@ -8,6 +8,7 @@ export const AppCarsPage = () => {
   const [cars, setCars] = useState([]);
 
   const handleGetCars = async () => {
+    console.log("test");
     const { data } = await carService.getAll();
     setCars(data);
   };

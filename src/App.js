@@ -1,45 +1,33 @@
 import { BrowserRouter, Route, Switch, Link, Redirect } from "react-router-dom";
+import { GuardedRoute } from "./components/common/GuardedRoute";
+import GuestRoute from "./components/common/GuestRoute";
+import { NavBar } from "./components/common/NavBar";
 import { SingleMovieDetails } from "./components/SingleMovieDetails";
 import { AddCarPage } from "./pages/AddCarPage";
 import { CarPage } from "./pages/AppCarPage";
 import { AppCarsPage } from "./pages/AppCarsPage";
 import { EditCarPage } from "./pages/EditCarPage";
+import { Login } from "./pages/LoginPage";
+import { authService } from "./services/AuthService";
 
 function App() {
   return (
     <div className="App">
       <BrowserRouter>
         <header>
-          <nav>
-            <Link to="/cars"> Cars </Link>
-            <Link to="/add"> Add </Link>
-            <hr />
-          </nav>
+          <NavBar logout={()=>authService.logout()}/>
         </header>
         <Switch>
-          <Route
-            exact
-            path="/"
-            render={() => {
-              return <Redirect to="/cars" />;
-            }}
-          />
-          <Route exact path="/cars">
-            <AppCarsPage />
-          </Route>
-          <Route path="/add">
-            <AddCarPage />
-          </Route>
-          <Route path="/edit/:id">
-            <EditCarPage />
-          </Route>
-          <Route path="/cars/:id">
-            <CarPage/>
-          </Route>
+          <GuardedRoute component={AppCarsPage} exact path="/cars"/>
+          <GuardedRoute component={AddCarPage} path="/add"/>
+          <GuardedRoute component={CarPage} path="/cars/:id"/>
+          <GuestRoute component={Login} path="/login"/>
         </Switch>
       </BrowserRouter>
     </div>
   );
 }
+
+
 
 export default App;
